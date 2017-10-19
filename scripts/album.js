@@ -1,34 +1,41 @@
-var createSongRow = function(songNumber, songName, songLength) {
-    var template =
-    '<tr class="album-view-song-item">'
-    '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
-    '  <td class="song-item-title">' + songName + '</td>'
-    '  <td class="song-item-duration">' + songLength + '</td>'
-    '</tr>'
+var setSong = function(songNumber) {
+  currentlyPlayingSongNumber = parseInt(songNumber);
+  currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
 };
 
-var $row = $(template);
+var getSongNumberCell = function(number) {
+    return $('.song-item-number[data-song-number="' + number + '"]');
+};
 
-var clickHandler = function() {
-var songNumber = parseInt($(this).attr('data-song-number'));
+var createSongRow = function(songNumber, songName, songLength) {
+    var template =
+      '<tr class="album-view-song-item">'
+    + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
+    + '  <td class="song-item-title">' + songName + '</td>'
+    + '  <td class="song-item-duration">' + songLength + '</td>'
+    + '</tr>'
+    ;
 
-   if (currentlyPlayingSongNumber !== null) {
+    var $row = $(template);
 
-   var currentlyPlayingCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
-   currentlyPlayingCell.html(currentlyPlayingSongNumber);
-    }
+    var clickHandler = function() {
+        var songNumber = parseInt($(this).attr('data-song-number'));
 
-   if (currentlyPlayingSongNumber !== songNumber) {
-        $(this).html(pauseButtonTemplate);
-        currentlyPlayingSongNumber = songNumber;
-        currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
-        updatePlayerBarSong();
-    } else if (currentlyPlayingSongNumber === songNumber) {
-        $(this).html(playButtonTemplate);
-        $('.main-controls .play-pause').html(playerBarPlayButton);
-        currentlyPlayingSongNumber = null;
-        currentSongFromAlbum = null;
-    }
+        if (currentlyPlayingSongNumber !== null) {
+            var currentlyPlayingCell = $('.song-item-number[data-song-number="'
+            + currentlyPlayingSongNumber + '"]');
+            currentlyPlayingCell.html(currentlyPlayingSongNumber);
+          }
+          if (currentlyPlayingSongNumber !== songNumber) {
+            $(this).html(pauseButtonTemplate);
+            setSong(songNumber);
+            updatePlayerBarSong();
+          } else if (currentlyPlayingSongNumber === songNumber) {
+            $(this).html(playButtonTemplate);
+            $('.main-controls .play-pause').html(playerBarPlayButton);
+            currentlyPlayingSongNumber = null;
+            currentSongFromAlbum = null;
+          }
 
 };
 
